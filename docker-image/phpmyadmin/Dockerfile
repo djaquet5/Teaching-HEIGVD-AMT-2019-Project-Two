@@ -1,0 +1,1 @@
+From phpmyadmin/phpmyadmin:latest
