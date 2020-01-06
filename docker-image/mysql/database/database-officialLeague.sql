@@ -27,11 +27,7 @@ ENGINE = InnoDB CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `officialLeague`.`Official` (
   `id` 			INT NOT NULL AUTO_INCREMENT,
-  `firstname`	VARCHAR(45) NOT NULL,
-  `lastname`	VARCHAR(45) NOT NULL,
-  `email`		VARCHAR(45) NOT NULL,
-  `password`	VARCHAR(255) NOT NULL,
-  `level`		TINYINT NOT NULL,
+  `level`		INT NOT NULL,
   `idTeam` 		INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_Official_Team_idx` (`idTeam` ASC),
