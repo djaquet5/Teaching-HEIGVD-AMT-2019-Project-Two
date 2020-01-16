@@ -58,7 +58,6 @@ paths:
         required: true
         type: integer
       - $ref: '#/parameters/token'
-
     get:
       description: get a team by id
       operationId: getTeamById
@@ -66,7 +65,7 @@ paths:
         - application/json
       responses:
         '200':
-          description: product retrieved successfully
+          description: team retrieved successfully
           schema:
             $ref: '#/definitions/Team'
         '403':
@@ -84,6 +83,149 @@ paths:
           description: forbidden
         '404':
           description: team not found
+
+  /games:
+    parameters:
+      - $ref: '#/parameters/token'
+    get:
+      description: get the list of all games
+      operationId: getGames
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Game'
+        '403':
+          description: forbidden
+    post:
+      description: create a game
+      operationId: createGame
+      consumes:
+        - application/json
+      parameters:
+        - name: game
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Game'
+      responses:
+        '201':
+          description: created
+          schema:
+            type: object
+        '403':
+          description: forbidded
+
+  /games/{gameId}:
+    parameters:
+      - name: gameId
+        in: path
+        required: true
+        type: integer
+      - $ref: '#/parameters/token'
+
+    get:
+      description: get a game by id
+      operationId: getGameById
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: game retrieved successfully
+          schema:
+            $ref: '#/definitions/Game'
+        '403':
+          description: forbidden
+        '404':
+          description: game not found
+
+    delete:
+      description: delete a game by id
+      operationId: deleteGameById
+      responses:
+        '204':
+          description: game deleted successfully
+        '403':
+          description: forbidden
+        '404':
+          description: game not found
+
+  /officials:
+    parameters:
+      - $ref: '#/parameters/token'
+
+    get:
+      description: get a list of all officials
+      operationId: getOfficials
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Official'
+        '403':
+          description: forbidden
+
+    post:
+      description: create an official
+      operationId: createOfficial
+      consumes:
+        - application/json
+      parameters:
+        - name: official
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Official'
+      responses:
+        '201':
+          description: created
+          schema:
+            type: object
+        '403':
+          description: forbidden
+
+
+  /officials/{officialId}:
+    parameters:
+      - name: gameId
+        in: path
+        required: true
+        type: integer
+      - $ref: '#/parameters/token'
+
+    get:
+      description: get an official by id
+      operationId: getOfficialById
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: official retrieved successfully
+          schema:
+            $ref: '#/definitions/Official'
+        '403':
+          description: forbidden
+        '404':
+          description: official not found
+
+    delete:
+      description: delete an official by id
+      operationId: deleteOfficialById
+      responses:
+        '204':
+          description: official deleted successfully
+        '403':
+          description: forbidden
+        '404':
+          description: official not found
 
   /fruits:
     post:
@@ -126,6 +268,39 @@ definitions:
         type: string
       city:
         type: string
+
+  Official:
+    type: object
+    properties:
+      level:
+        type: integer
+      team:
+        $ref: '#/definitions/Team'
+
+  Game:
+    type: object
+    properties:
+      timestamp:
+        type: string
+        format: date-time
+      teamAway:
+        $ref: '#/definitions/Team'
+      teamHome:
+        $ref: '#/definitions/Team'
+      referee:
+        $ref: '#/definitions/Official'
+      umpire:
+        $ref: '#/definitions/Official'
+      chainJudge:
+        $ref: '#/definitions/Official'
+      lineJudge:
+        $ref: '#/definitions/Official'
+      backJudge:
+        $ref: '#/definitions/Official'
+      sideJudge:
+        $ref: '#/definitions/Official'
+      fieldJudge:
+        $ref: '#/definitions/Official'
 
   Fruit:
     type: object
