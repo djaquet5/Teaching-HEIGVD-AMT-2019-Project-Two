@@ -17,8 +17,8 @@ public class GamesApiController implements GamesApi {
     @Autowired
     GameRepository gameRepository;
 
-    @Override
-    public ResponseEntity<List<Game>> getGames(String authorization) {
+//    public ResponseEntity<List<Game>> getGames(String authorization) {
+    public ResponseEntity<List<Game>> getGames() {
         List<Game> games = new ArrayList<>();
         for (GameEntity gameEntity : gameRepository.findAll()) {
             games.add(toGame(gameEntity));
@@ -29,6 +29,8 @@ public class GamesApiController implements GamesApi {
 
     private Game toGame(GameEntity entity) {
         Game game = new Game();
+        game.setId(entity.getId());
+        game.setTimestamp(entity.getTimestamp());
         game.setTeamAway(TeamsApiController.toTeam(entity.getAway()));
         game.setTeamHome(TeamsApiController.toTeam(entity.getHome()));
         game.setReferee(OfficialsApiController.toOfficial(entity.getReferee()));

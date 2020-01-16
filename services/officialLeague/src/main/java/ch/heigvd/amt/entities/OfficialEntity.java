@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 // TODO
 @Getter
+@Setter
 @Entity
 @Table(name = "Official")
 public class OfficialEntity implements Serializable {
@@ -16,11 +17,9 @@ public class OfficialEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Setter
     private int level;
 
     @ManyToOne
     @JoinColumn(name = "idTeam")
-    @Setter
     private TeamEntity team;
 }

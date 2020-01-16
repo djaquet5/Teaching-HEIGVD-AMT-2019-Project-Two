@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class TeamsApiController implements TeamsApi {
@@ -17,13 +18,27 @@ public class TeamsApiController implements TeamsApi {
     @Autowired
     TeamRepository teamRepository;
 
-    public ResponseEntity<List<Team>> getTeams(String authorization) {
+//    public ResponseEntity<List<Team>> getTeams(String authorization) {
+    @Override
+    public ResponseEntity<List<Team>> getTeams() {
         List<Team> teams = new ArrayList<>();
         for (TeamEntity teamEntity : teamRepository.findAll()) {
             teams.add(toTeam(teamEntity));
         }
 
         return ResponseEntity.ok(teams);
+    }
+
+    @Override
+    public ResponseEntity<Team> getTeamById(Integer teamId) {
+        Optional<TeamEntity> teamEntity = teamRepository.findById(teamId);
+
+        if(teamEntity.isPresent()) {
+            return ResponseEntity.ok(toTeam(teamEntity.get()));
+        }
+
+        // TODO : not working
+        return ResponseEntity.notFound().build();
     }
 
     private TeamEntity toTeamEntity(Team team) {
@@ -38,6 +53,7 @@ public class TeamsApiController implements TeamsApi {
 
     public static Team toTeam(TeamEntity entity) {
         Team team = new Team();
+        team.setId(entity.getId());
         team.setName(entity.getName());
         team.setAddress(entity.getAddress());
         team.setZip(entity.getZip());

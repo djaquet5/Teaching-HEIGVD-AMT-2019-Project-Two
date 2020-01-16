@@ -16,8 +16,6 @@ parameters:
 
 paths:
   /teams:
-    parameters:
-      - $ref: '#/parameters/token'
     get:
       description: get the list of all teams
       operationId: getTeams
@@ -57,7 +55,6 @@ paths:
         in: path
         required: true
         type: integer
-      - $ref: '#/parameters/token'
     get:
       description: get a team by id
       operationId: getTeamById
@@ -85,8 +82,6 @@ paths:
           description: team not found
 
   /games:
-    parameters:
-      - $ref: '#/parameters/token'
     get:
       description: get the list of all games
       operationId: getGames
@@ -155,9 +150,6 @@ paths:
           description: game not found
 
   /officials:
-    parameters:
-      - $ref: '#/parameters/token'
-
     get:
       description: get a list of all officials
       operationId: getOfficials
@@ -230,6 +222,8 @@ definitions:
   Team:
     type: object
     properties:
+      id:
+        type: integer
       name:
         type: string
       address:
@@ -242,6 +236,8 @@ definitions:
   Official:
     type: object
     properties:
+      id:
+        type: integer
       level:
         type: integer
       team:
@@ -250,6 +246,8 @@ definitions:
   Game:
     type: object
     properties:
+      id:
+        type: integer
       timestamp:
         type: string
         format: date-time

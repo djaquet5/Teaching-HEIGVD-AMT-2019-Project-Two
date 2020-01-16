@@ -18,7 +18,8 @@ public class OfficialsApiController implements OfficialsApi {
     OfficialRepository officialRepository;
 
     @Override
-    public ResponseEntity<List<Official>> getOfficials(String authorization) {
+//    public ResponseEntity<List<Official>> getOfficials(String authorization) {
+    public ResponseEntity<List<Official>> getOfficials() {
         List<Official> officials = new ArrayList<>();
         for (OfficialEntity officialEntity : officialRepository.findAll()) {
             officials.add(toOfficial(officialEntity));
@@ -29,6 +30,7 @@ public class OfficialsApiController implements OfficialsApi {
 
     public static Official toOfficial(OfficialEntity entity) {
         Official official = new Official();
+        official.setId(entity.getId());
         official.setLevel(entity.getLevel());
         official.setTeam(TeamsApiController.toTeam(entity.getTeam()));
 

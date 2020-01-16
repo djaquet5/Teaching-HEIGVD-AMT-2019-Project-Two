@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 // TODO
 @Getter
+@Setter
 @Entity
 @Table(name = "Team")
 public class TeamEntity implements Serializable {
@@ -17,15 +18,8 @@ public class TeamEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Setter
     private String name;
-
-    @Setter
     private String address;
-
-    @Setter
     private String zip;
-
-    @Setter
     private String city;
 }
