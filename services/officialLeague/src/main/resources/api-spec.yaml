@@ -1,13 +1,90 @@
 swagger: '2.0'
 info:
   version: '0.1.0'
-  title: Fruits API
-  description: An API to demonstrate Swagger and Spring Boot
+  title: OfficialLeague API
+  description: An API to manage an american football league
 host: localhost:8080
 basePath: /api
 schemes:
   - http
+parameters:
+  token:
+    in: header
+    name: Authorization
+    type: string
+    required: true
+
 paths:
+  /teams:
+    parameters:
+      - $ref: '#/parameters/token'
+    get:
+      description: get the list of all teams
+      operationId: getTeams
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Team'
+        '403':
+          description: forbidden
+    post:
+      description: create a team
+      operationId: createTeam
+      consumes:
+        - application/json
+      parameters:
+        - name: team
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Team'
+      responses:
+        '201':
+          description: created
+          schema:
+            type: object
+        '403':
+          description: forbidded
+
+  /teams/{teamId}:
+    parameters:
+      - name: teamId
+        in: path
+        required: true
+        type: integer
+      - $ref: '#/parameters/token'
+
+    get:
+      description: get a team by id
+      operationId: getTeamById
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: product retrieved successfully
+          schema:
+            $ref: '#/definitions/Team'
+        '403':
+          description: forbidden
+        '404':
+          description: team not found
+
+    delete:
+      description: delete a team by id
+      operationId: deleteTeamById
+      responses:
+        '204':
+          description: team deleted successfully
+        '403':
+          description: forbidden
+        '404':
+          description: team not found
+
   /fruits:
     post:
       description: create a fruit
@@ -38,6 +115,18 @@ paths:
             items:
               $ref: '#/definitions/Fruit'
 definitions:
+  Team:
+    type: object
+    properties:
+      name:
+        type: string
+      address:
+        type: string
+      zip:
+        type: string
+      city:
+        type: string
+
   Fruit:
     type: object
     properties:
