@@ -5,12 +5,13 @@ import lombok.Setter;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 // TODO
 @Getter
 @Entity
 @Table(name = "Game")
-public class GameEntity {
+public class GameEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
