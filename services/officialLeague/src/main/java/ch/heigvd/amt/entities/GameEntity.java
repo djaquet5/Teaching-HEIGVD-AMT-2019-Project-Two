@@ -15,8 +15,9 @@ public class GameEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
+    @Column(columnDefinition = "DATETIME")
     @Setter
     private DateTime timestamp;
 

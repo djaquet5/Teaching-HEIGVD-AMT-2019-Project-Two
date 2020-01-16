@@ -192,7 +192,6 @@ paths:
         '403':
           description: forbidden
 
-
   /officials/{officialId}:
     parameters:
       - name: gameId
@@ -227,35 +226,6 @@ paths:
         '404':
           description: official not found
 
-  /fruits:
-    post:
-      description: create a fruit
-      operationId: createFruit
-      consumes:
-        - application/json
-      parameters:
-        - name: fruit
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Fruit'
-      responses:
-        '201':
-          description: created
-          schema:
-            type: object
-    get:
-      description: get the list of all fruits
-      operationId: getFruits
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: success
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Fruit'
 definitions:
   Team:
     type: object
@@ -301,15 +271,3 @@ definitions:
         $ref: '#/definitions/Official'
       fieldJudge:
         $ref: '#/definitions/Official'
-
-  Fruit:
-    type: object
-    properties:
-      kind:
-        type: string
-      colour:
-        type: string
-      size:
-        type: string
-      weight:
-        type: string

@@ -17,7 +17,7 @@ public class TeamsApiController implements TeamsApi {
     @Autowired
     TeamRepository teamRepository;
 
-    public ResponseEntity<List<Team>> getTeams() {
+    public ResponseEntity<List<Team>> getTeams(String authorization) {
         List<Team> teams = new ArrayList<>();
         for (TeamEntity teamEntity : teamRepository.findAll()) {
             teams.add(toTeam(teamEntity));
@@ -26,7 +26,17 @@ public class TeamsApiController implements TeamsApi {
         return ResponseEntity.ok(teams);
     }
 
-    private Team toTeam(TeamEntity entity) {
+    private TeamEntity toTeamEntity(Team team) {
+        TeamEntity entity = new TeamEntity();
+        entity.setName(entity.getName());
+        entity.setAddress(team.getAddress());
+        entity.setCity(team.getCity());
+        entity.setZip(team.getZip());
+
+        return entity;
+    }
+
+    public static Team toTeam(TeamEntity entity) {
         Team team = new Team();
         team.setName(entity.getName());
         team.setAddress(entity.getAddress());

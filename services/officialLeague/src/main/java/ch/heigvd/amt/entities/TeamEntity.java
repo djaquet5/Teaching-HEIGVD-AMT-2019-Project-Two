@@ -15,7 +15,7 @@ public class TeamEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @Setter
     private String name;
