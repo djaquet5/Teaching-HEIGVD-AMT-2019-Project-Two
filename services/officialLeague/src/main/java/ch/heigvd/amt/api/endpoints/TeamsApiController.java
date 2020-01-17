@@ -2,6 +2,7 @@ package ch.heigvd.amt.api.endpoints;
 
 import ch.heigvd.amt.api.TeamsApi;
 import ch.heigvd.amt.api.model.Team;
+import ch.heigvd.amt.api.model.TeamDTO;
 import ch.heigvd.amt.entities.TeamEntity;
 import ch.heigvd.amt.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class TeamsApiController implements TeamsApi {
     TeamRepository teamRepository;
 
     @Override
-    public ResponseEntity<Void> createTeam(@Valid Team team) {
+    public ResponseEntity<Void> createTeam(@Valid TeamDTO team) {
         TeamEntity entity = toTeamEntity(team);
         teamRepository.save(entity);
 
@@ -51,12 +52,12 @@ public class TeamsApiController implements TeamsApi {
         return ResponseEntity.notFound().build();
     }
 
-    private TeamEntity toTeamEntity(Team team) {
+    private TeamEntity toTeamEntity(TeamDTO dto) {
         TeamEntity entity = new TeamEntity();
-        entity.setName(team.getName());
-        entity.setAddress(team.getAddress());
-        entity.setCity(team.getCity());
-        entity.setZip(team.getZip());
+        entity.setName(dto.getName());
+        entity.setAddress(dto.getAddress());
+        entity.setCity(dto.getCity());
+        entity.setZip(dto.getZip());
 
         return entity;
     }
