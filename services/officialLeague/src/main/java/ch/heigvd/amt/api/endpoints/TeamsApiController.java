@@ -53,7 +53,7 @@ public class TeamsApiController implements TeamsApi {
 
     private TeamEntity toTeamEntity(Team team) {
         TeamEntity entity = new TeamEntity();
-        entity.setName(entity.getName());
+        entity.setName(team.getName());
         entity.setAddress(team.getAddress());
         entity.setCity(team.getCity());
         entity.setZip(team.getZip());
