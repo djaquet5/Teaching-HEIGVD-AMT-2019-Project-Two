@@ -2,7 +2,6 @@ package ch.heigvd.amt.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,8 +17,7 @@ public class GameEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(columnDefinition = "DATETIME")
-    private DateTime timestamp;
+    private String timestamp;
 
     @ManyToOne
     @JoinColumn(name = "idTeamAway")

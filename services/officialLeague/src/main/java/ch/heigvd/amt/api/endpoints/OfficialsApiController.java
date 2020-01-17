@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class OfficialsApiController implements OfficialsApi {
@@ -26,6 +27,18 @@ public class OfficialsApiController implements OfficialsApi {
         }
 
         return ResponseEntity.ok(officials);
+    }
+
+    @Override
+    public ResponseEntity<Official> getOfficialById(Integer officialId) {
+        Optional<OfficialEntity> officialEntity = officialRepository.findById(officialId);
+
+        if(officialEntity.isPresent()) {
+            return ResponseEntity.ok(toOfficial(officialEntity.get()));
+        }
+
+        // TODO : not working
+        return ResponseEntity.notFound().build();
     }
 
     public static Official toOfficial(OfficialEntity entity) {

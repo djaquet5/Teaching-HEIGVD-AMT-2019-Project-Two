@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class GamesApiController implements GamesApi {
@@ -18,6 +19,7 @@ public class GamesApiController implements GamesApi {
     GameRepository gameRepository;
 
 //    public ResponseEntity<List<Game>> getGames(String authorization) {
+    @Override
     public ResponseEntity<List<Game>> getGames() {
         List<Game> games = new ArrayList<>();
         for (GameEntity gameEntity : gameRepository.findAll()) {
@@ -25,6 +27,18 @@ public class GamesApiController implements GamesApi {
         }
 
         return ResponseEntity.ok(games);
+    }
+
+    @Override
+    public ResponseEntity<Game> getGameById(Integer gameId) {
+        Optional<GameEntity> officialEntity = gameRepository.findById(gameId);
+
+        if(officialEntity.isPresent()) {
+            return ResponseEntity.ok(toGame(officialEntity.get()));
+        }
+
+        // TODO : not working
+        return ResponseEntity.notFound().build();
     }
 
     private Game toGame(GameEntity entity) {
