@@ -33,6 +33,7 @@ public class GamesApiController implements GamesApi {
     @Autowired
     OfficialRepository officialRepository;
 
+    ////////////////// CREATE //////////////////
     @Override
     public ResponseEntity<Void> createGame(@Valid GameDTO game) {
         GameEntity entity = toGameEntity(game);
@@ -46,6 +47,7 @@ public class GamesApiController implements GamesApi {
 
     //    public ResponseEntity<List<Game>> getGames(String authorization) {
 
+    ////////////////// READ //////////////////
     @Override
     public ResponseEntity<List<Game>> getGames(@Min(0) @Valid Integer page, @Min(0) @Valid Integer limit) {
         List<Game> games = new ArrayList<>();
@@ -67,6 +69,20 @@ public class GamesApiController implements GamesApi {
 
         // TODO : not working
         return ResponseEntity.notFound().build();
+    }
+
+    ////////////////// UPDATE //////////////////
+
+
+    ////////////////// DELETE //////////////////
+    @Override
+    public ResponseEntity<Void> deleteGameById(Integer gameId) {
+        if(!gameRepository.existsById(gameId))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        gameRepository.deleteById(gameId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     private GameEntity toGameEntity(GameDTO dto) {
