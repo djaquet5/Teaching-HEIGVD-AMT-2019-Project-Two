@@ -5,9 +5,12 @@ import ch.heigvd.amt.api.model.Game;
 import ch.heigvd.amt.entities.GameEntity;
 import ch.heigvd.amt.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +22,12 @@ public class GamesApiController implements GamesApi {
     GameRepository gameRepository;
 
 //    public ResponseEntity<List<Game>> getGames(String authorization) {
+
     @Override
-    public ResponseEntity<List<Game>> getGames() {
+    public ResponseEntity<List<Game>> getGames(@Valid Integer page, @Valid Integer limit) {
         List<Game> games = new ArrayList<>();
-        for (GameEntity gameEntity : gameRepository.findAll()) {
+        Pageable pageable = PageRequest.of(page, limit);
+        for (GameEntity gameEntity : gameRepository.findAll(pageable)) {
             games.add(toGame(gameEntity));
         }
 

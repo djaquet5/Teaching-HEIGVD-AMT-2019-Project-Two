@@ -7,12 +7,11 @@ host: localhost:8080
 basePath: /api
 schemes:
   - http
-parameters:
-  token:
-    in: header
+securityDefinitions:
+  Bearer:
+    type: apiKey
     name: Authorization
-    type: string
-    required: true
+    in: header
 
 paths:
   /teams:
@@ -87,6 +86,21 @@ paths:
       operationId: getGames
       produces:
         - application/json
+      parameters:
+        - name: page
+          in: query
+          required: false
+          type: integer
+          default: 0
+          minimum: 0
+          description: The index of the page to display (starting at 0)
+        - name: limit
+          in: query
+          required: false
+          type: integer
+          default: 10
+          minimum: 0
+          description: The number of element to display
       responses:
         '200':
           description: success

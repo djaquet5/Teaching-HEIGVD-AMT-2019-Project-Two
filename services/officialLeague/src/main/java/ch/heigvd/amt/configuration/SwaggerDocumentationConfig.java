@@ -27,6 +27,7 @@ public class SwaggerDocumentationConfig {
             .build();
     }
 
+    // TODO : Uncomment for token
     @Bean
     public Docket customImplementation(){
         return new Docket(DocumentationType.SWAGGER_2)
@@ -35,6 +36,7 @@ public class SwaggerDocumentationConfig {
                     .build()
                 .directModelSubstitute(org.joda.time.LocalDate.class, java.sql.Date.class)
                 .directModelSubstitute(org.joda.time.DateTime.class, java.util.Date.class)
+                /*.securitySchemes(Arrays.asList(new ApiKey("Bearer", "Authorization", "header")))*/
                 .apiInfo(apiInfo());
     }
 
