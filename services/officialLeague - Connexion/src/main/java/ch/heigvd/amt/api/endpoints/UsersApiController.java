@@ -1,13 +1,13 @@
-package ch.heigvd.amt.api.endpoints;
+package ch.heigvd.amt.repositories.UserRepository;
 
 import com.auth0.jwt.exceptions.JWTCreationException;
-
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
+import ch.heigvd.amt.api.business;
 
 import javax.validation.Valid;
 
@@ -20,10 +20,10 @@ public class UsersApiController implements ConnectionApi {
     UserRepository userRepository;
 
     @Autowired
-    AuthenticationService authentication;
+    IAuthentication authentication;
 
     @Autowired
-    AuthorizationService authorization;
+    IAuthorization authorization;
 
     @Override
     public ResponseEntity<Token> login(@ApiParam(value = "" ,required=true )  @Valid @RequestBody Credentials credentials) {
