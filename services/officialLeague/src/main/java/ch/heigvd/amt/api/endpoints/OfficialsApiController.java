@@ -26,6 +26,7 @@ public class OfficialsApiController implements OfficialsApi {
     @Autowired
     TeamRepository teamRepository;
 
+    ////////////////// CREATE //////////////////
     @Override
     public ResponseEntity<Void> createOfficial(@Valid OfficialDTO official) {
         OfficialEntity entity = toOfficialEntity(official);
@@ -37,6 +38,7 @@ public class OfficialsApiController implements OfficialsApi {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    ////////////////// READ //////////////////
     @Override
 //    public ResponseEntity<List<Official>> getOfficials(String authorization) {
     public ResponseEntity<List<Official>> getOfficials() {
@@ -58,6 +60,20 @@ public class OfficialsApiController implements OfficialsApi {
 
         // TODO : not working
         return ResponseEntity.notFound().build();
+    }
+
+    ////////////////// UPDATE //////////////////
+
+
+    ////////////////// DELETE //////////////////
+    @Override
+    public ResponseEntity<Void> deleteOfficialById(Integer officialId) {
+        if (!officialRepository.existsById(officialId))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        officialRepository.deleteById(officialId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     private OfficialEntity toOfficialEntity(OfficialDTO dto) {
