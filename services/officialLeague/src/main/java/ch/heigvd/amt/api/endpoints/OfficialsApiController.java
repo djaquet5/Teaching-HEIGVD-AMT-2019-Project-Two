@@ -4,7 +4,6 @@ import ch.heigvd.amt.api.OfficialsApi;
 import ch.heigvd.amt.api.model.Official;
 import ch.heigvd.amt.api.model.OfficialDTO;
 import ch.heigvd.amt.entities.OfficialEntity;
-import ch.heigvd.amt.entities.TeamEntity;
 import ch.heigvd.amt.repositories.OfficialRepository;
 import ch.heigvd.amt.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +66,8 @@ public class OfficialsApiController implements OfficialsApi {
         try {
             entity.setTeam(teamRepository.findById(dto.getIdTeam()).get());
         } catch(NoSuchElementException e) {
+            System.out.println(e.getMessage());
+
             return null;
         }
         entity.setLevel(dto.getLevel());

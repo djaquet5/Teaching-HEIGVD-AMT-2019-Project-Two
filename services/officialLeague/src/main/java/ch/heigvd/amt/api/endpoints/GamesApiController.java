@@ -2,11 +2,15 @@ package ch.heigvd.amt.api.endpoints;
 
 import ch.heigvd.amt.api.GamesApi;
 import ch.heigvd.amt.api.model.Game;
+import ch.heigvd.amt.api.model.GameDTO;
 import ch.heigvd.amt.entities.GameEntity;
 import ch.heigvd.amt.repositories.GameRepository;
+import ch.heigvd.amt.repositories.OfficialRepository;
+import ch.heigvd.amt.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
@@ -14,6 +18,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
@@ -22,7 +27,24 @@ public class GamesApiController implements GamesApi {
     @Autowired
     GameRepository gameRepository;
 
-//    public ResponseEntity<List<Game>> getGames(String authorization) {
+    @Autowired
+    TeamRepository teamRepository;
+
+    @Autowired
+    OfficialRepository officialRepository;
+
+    @Override
+    public ResponseEntity<Void> createGame(@Valid GameDTO game) {
+        GameEntity entity = toGameEntity(game);
+        if (entity == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        gameRepository.save(entity);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    //    public ResponseEntity<List<Game>> getGames(String authorization) {
 
     @Override
     public ResponseEntity<List<Game>> getGames(@Min(0) @Valid Integer page, @Min(0) @Valid Integer limit) {
@@ -45,6 +67,32 @@ public class GamesApiController implements GamesApi {
 
         // TODO : not working
         return ResponseEntity.notFound().build();
+    }
+
+    private GameEntity toGameEntity(GameDTO dto) {
+        GameEntity entity = new GameEntity();
+
+        try{
+            // Set the teams
+            entity.setAway(teamRepository.findById(dto.getIdTeamAway()).get());
+            entity.setHome(teamRepository.findById(dto.getIdTeamHome()).get());
+
+            // Set the officials
+            entity.setReferee(officialRepository.findById(dto.getIdReferee()).get());
+            entity.setUmpire(officialRepository.findById(dto.getIdUmpire()).get());
+            entity.setChainJudge(officialRepository.findById(dto.getIdChainJudge()).get());
+            entity.setLineJudge(officialRepository.findById(dto.getIdLineJudge()).get());
+            entity.setBackJudge(officialRepository.findById(dto.getIdBackJudge()).get());
+            entity.setSideJudge(officialRepository.findById(dto.getIdSideJudge()).get());
+            entity.setFieldJudge(officialRepository.findById(dto.getIdFieldJudge()).get());
+        } catch(NoSuchElementException e) {
+            System.out.println(e.getMessage());
+
+            return null;
+        }
+        entity.setTimestamp(dto.getTimestamp());
+
+        return entity;
     }
 
     private Game toGame(GameEntity entity) {

@@ -122,8 +122,8 @@ paths:
       responses:
         '201':
           description: created
-          schema:
-            type: object
+        '400':
+          description: syntax error
         '403':
           description: forbidded
 
