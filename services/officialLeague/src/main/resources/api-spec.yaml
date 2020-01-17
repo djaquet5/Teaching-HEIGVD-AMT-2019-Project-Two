@@ -39,7 +39,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Team'
+            $ref: '#/definitions/TeamDTO'
       responses:
         '201':
           description: created
@@ -118,7 +118,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Game'
+            $ref: '#/definitions/GameDTO'
       responses:
         '201':
           description: created
@@ -186,12 +186,10 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Official'
+            $ref: '#/definitions/OfficialDTO'
       responses:
         '201':
           description: created
-          schema:
-            type: object
         '403':
           description: forbidden
 
@@ -243,6 +241,18 @@ definitions:
       city:
         type: string
 
+  TeamDTO:
+    type: object
+    properties:
+      name:
+        type: string
+      address:
+        type: string
+      zip:
+        type: string
+      city:
+        type: string
+
   Official:
     type: object
     properties:
@@ -252,6 +262,14 @@ definitions:
         type: integer
       team:
         $ref: '#/definitions/Team'
+
+  OfficialDTO:
+    type: object
+    properties:
+      level:
+        type: integer
+      idTeam:
+        type: integer
 
   Game:
     type: object
@@ -278,3 +296,27 @@ definitions:
         $ref: '#/definitions/Official'
       fieldJudge:
         $ref: '#/definitions/Official'
+
+  GameDTO:
+    type: object
+    properties:
+      timestamp:
+        type: string
+      idTeamAway:
+        type: integer
+      idTeamHome:
+        type: integer
+      idReferee:
+        type: integer
+      idUmpire:
+        type: integer
+      idChainJudge:
+        type: integer
+      idLineJudge:
+        type: integer
+      idBackJudge:
+        type: integer
+      idSideJudge:
+        type: integer
+      idFieldJudge:
+        type: integer
