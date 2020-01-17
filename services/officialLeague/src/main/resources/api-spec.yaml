@@ -190,6 +190,8 @@ paths:
       responses:
         '201':
           description: created
+        '400':
+          description: syntax error
         '403':
           description: forbidden
 

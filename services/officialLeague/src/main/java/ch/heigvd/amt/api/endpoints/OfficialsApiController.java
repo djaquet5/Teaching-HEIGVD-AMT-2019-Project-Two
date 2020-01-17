@@ -30,9 +30,8 @@ public class OfficialsApiController implements OfficialsApi {
     @Override
     public ResponseEntity<Void> createOfficial(@Valid OfficialDTO official) {
         OfficialEntity entity = toOfficialEntity(official);
-        // TODO : Throw exception
         if (entity == null)
-            return null;
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         officialRepository.save(entity);
 
