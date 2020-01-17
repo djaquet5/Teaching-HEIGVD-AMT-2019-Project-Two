@@ -21,6 +21,7 @@ public class TeamsApiController implements TeamsApi {
     @Autowired
     TeamRepository teamRepository;
 
+    ////////////////// CREATE //////////////////
     @Override
     public ResponseEntity<Void> createTeam(@Valid TeamDTO team) {
         TeamEntity entity = toTeamEntity(team);
@@ -29,6 +30,7 @@ public class TeamsApiController implements TeamsApi {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    ////////////////// READ //////////////////
     //    public ResponseEntity<List<Team>> getTeams(String authorization) {
     @Override
     public ResponseEntity<List<Team>> getTeams() {
@@ -50,6 +52,20 @@ public class TeamsApiController implements TeamsApi {
 
         // TODO : not working
         return ResponseEntity.notFound().build();
+    }
+
+    ////////////////// UPDATE //////////////////
+
+
+    ////////////////// DELETE //////////////////
+    @Override
+    public ResponseEntity<Void> deleteTeamById(Integer teamId) {
+        if (!teamRepository.existsById(teamId))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        teamRepository.deleteById(teamId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     private TeamEntity toTeamEntity(TeamDTO dto) {
