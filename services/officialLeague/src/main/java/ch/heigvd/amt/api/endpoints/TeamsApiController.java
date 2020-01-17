@@ -5,9 +5,11 @@ import ch.heigvd.amt.api.model.Team;
 import ch.heigvd.amt.entities.TeamEntity;
 import ch.heigvd.amt.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +20,15 @@ public class TeamsApiController implements TeamsApi {
     @Autowired
     TeamRepository teamRepository;
 
-//    public ResponseEntity<List<Team>> getTeams(String authorization) {
+    @Override
+    public ResponseEntity<Void> createTeam(@Valid Team team) {
+        TeamEntity entity = toTeamEntity(team);
+        teamRepository.save(entity);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    //    public ResponseEntity<List<Team>> getTeams(String authorization) {
     @Override
     public ResponseEntity<List<Team>> getTeams() {
         List<Team> teams = new ArrayList<>();

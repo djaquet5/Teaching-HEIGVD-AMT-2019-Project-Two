@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class GamesApiController implements GamesApi {
 //    public ResponseEntity<List<Game>> getGames(String authorization) {
 
     @Override
-    public ResponseEntity<List<Game>> getGames(@Valid Integer page, @Valid Integer limit) {
+    public ResponseEntity<List<Game>> getGames(@Min(0) @Valid Integer page, @Min(0) @Valid Integer limit) {
         List<Game> games = new ArrayList<>();
         Pageable pageable = PageRequest.of(page, limit);
         for (GameEntity gameEntity : gameRepository.findAll(pageable)) {

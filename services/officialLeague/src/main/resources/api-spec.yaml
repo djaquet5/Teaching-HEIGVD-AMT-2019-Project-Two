@@ -16,7 +16,7 @@ securityDefinitions:
 paths:
   /teams:
     get:
-      description: get the list of all teams
+      description: Get the list of all teams
       operationId: getTeams
       produces:
         - application/json
@@ -30,7 +30,7 @@ paths:
         '403':
           description: forbidden
     post:
-      description: create a team
+      description: Create a team
       operationId: createTeam
       consumes:
         - application/json
@@ -43,8 +43,6 @@ paths:
       responses:
         '201':
           description: created
-          schema:
-            type: object
         '403':
           description: forbidded
 
@@ -55,7 +53,7 @@ paths:
         required: true
         type: integer
     get:
-      description: get a team by id
+      description: Get a team by id
       operationId: getTeamById
       produces:
         - application/json
@@ -70,7 +68,7 @@ paths:
           description: team not found
 
     delete:
-      description: delete a team by id
+      description: Delete a team by id
       operationId: deleteTeamById
       responses:
         '204':
@@ -82,7 +80,7 @@ paths:
 
   /games:
     get:
-      description: get the list of all games
+      description: Get the list of all games
       operationId: getGames
       produces:
         - application/json
@@ -111,7 +109,7 @@ paths:
         '403':
           description: forbidden
     post:
-      description: create a game
+      description: Create a game
       operationId: createGame
       consumes:
         - application/json
@@ -137,7 +135,7 @@ paths:
         type: integer
 
     get:
-      description: get a game by id
+      description: Get a game by id
       operationId: getGameById
       produces:
         - application/json
@@ -152,7 +150,7 @@ paths:
           description: game not found
 
     delete:
-      description: delete a game by id
+      description: Delete a game by id
       operationId: deleteGameById
       responses:
         '204':
@@ -164,7 +162,7 @@ paths:
 
   /officials:
     get:
-      description: get a list of all officials
+      description: Get a list of all officials
       operationId: getOfficials
       produces:
         - application/json
@@ -179,7 +177,7 @@ paths:
           description: forbidden
 
     post:
-      description: create an official
+      description: Create an official
       operationId: createOfficial
       consumes:
         - application/json
@@ -205,7 +203,7 @@ paths:
         type: integer
 
     get:
-      description: get an official by id
+      description: Get an official by id
       operationId: getOfficialById
       produces:
         - application/json
@@ -220,7 +218,7 @@ paths:
           description: official not found
 
     delete:
-      description: delete an official by id
+      description: Delete an official by id
       operationId: deleteOfficialById
       responses:
         '204':
