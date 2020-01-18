@@ -7,6 +7,7 @@ import ch.heigvd.amt.entities.GameEntity;
 import ch.heigvd.amt.repositories.GameRepository;
 import ch.heigvd.amt.repositories.OfficialRepository;
 import ch.heigvd.amt.repositories.TeamRepository;
+import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -72,7 +73,26 @@ public class GamesApiController implements GamesApi {
     }
 
     ////////////////// UPDATE //////////////////
+    @Override
+    public ResponseEntity<Void> updateGameById(Integer gameId, @Valid GameDTO game) {
+        GameEntity entity;
 
+        try {
+            entity = gameRepository.findById(gameId).get();
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        entity = changeElements(entity, game);
+        if(entity == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        gameRepository.save(entity);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
     ////////////////// DELETE //////////////////
     @Override
@@ -126,5 +146,58 @@ public class GamesApiController implements GamesApi {
         game.setSideJudge(OfficialsApiController.toOfficial(entity.getSideJudge()));
 
         return game;
+    }
+
+    private GameEntity changeElements(GameEntity entity, GameDTO dto) {
+        Integer idAway = dto.getIdTeamAway();
+        Integer idHome = dto.getIdTeamHome();
+        Integer idReferee = dto.getIdReferee();
+        Integer idUmpire = dto.getIdUmpire();
+        Integer idChainJudge = dto.getIdChainJudge();
+        Integer idLineJudge = dto.getIdLineJudge();
+        Integer idBackJudge = dto.getIdBackJudge();
+        Integer idFieldJudge = dto.getIdFieldJudge();
+        Integer idSideJudge = dto.getIdSideJudge();
+
+        try {
+            if(idAway != null)
+                entity.setAway(teamRepository.findById(idAway).get());
+
+            if(idHome != null)
+                entity.setHome(teamRepository.findById(idHome).get());
+
+            if(idReferee != null)
+                entity.setReferee(officialRepository.findById(idReferee).get());
+
+            if(idUmpire != null)
+                entity.setUmpire(officialRepository.findById(idUmpire).get());
+
+            if(idChainJudge != null)
+                entity.setChainJudge(officialRepository.findById(idChainJudge).get());
+
+            if(idLineJudge != null)
+                entity.setLineJudge(officialRepository.findById(idLineJudge).get());
+
+            if(idBackJudge != null)
+                entity.setBackJudge(officialRepository.findById(idBackJudge).get());
+
+            if(idFieldJudge != null)
+                entity.setFieldJudge(officialRepository.findById(idFieldJudge).get());
+
+            if(idSideJudge != null)
+                entity.setSideJudge(officialRepository.findById(idSideJudge).get());
+
+        } catch(NoSuchElementException e) {
+            System.out.println(e.getMessage());
+
+            return null;
+        }
+
+        // TODO : Check if it is a date
+        String timestamp = dto.getTimestamp();
+        if(timestamp != null && !timestamp.isEmpty())
+            entity.setTimestamp(timestamp);
+
+        return entity;
     }
 }

@@ -168,6 +168,25 @@ paths:
         '404':
           description: game not found
 
+    put:
+      description: Update a game by id
+      operationId: updateGameById
+      consumes:
+        - application/json
+      parameters:
+        - name: game
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/GameDTO'
+      responses:
+        '204':
+          description: Game updated successfully
+        '403':
+          description: Forbidden
+        '404':
+          description: Game not found
+
     delete:
       description: Delete a game by id
       operationId: deleteGameById
@@ -253,7 +272,7 @@ paths:
         '403':
           description: Forbidden
         '404':
-          description: Team not found
+          description: Official not found
 
     delete:
       description: Delete an official by id

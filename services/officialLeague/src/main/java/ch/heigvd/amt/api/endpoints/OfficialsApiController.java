@@ -76,7 +76,7 @@ public class OfficialsApiController implements OfficialsApi {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        entity = changeElement(entity, official);
+        entity = changeElements(entity, official);
         if(entity == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
@@ -121,13 +121,11 @@ public class OfficialsApiController implements OfficialsApi {
         return official;
     }
 
-    private OfficialEntity changeElement(OfficialEntity entity, OfficialDTO dto) {
-        TeamEntity team;
+    private OfficialEntity changeElements(OfficialEntity entity, OfficialDTO dto) {
         Integer idTeam = dto.getIdTeam();
         if(idTeam != null) {
             try {
-                team = teamRepository.findById(idTeam).get();
-                entity.setTeam(team);
+                entity.setTeam(teamRepository.findById(idTeam).get());
             } catch(NoSuchElementException e) {
                 System.out.println(e.getMessage());
 
