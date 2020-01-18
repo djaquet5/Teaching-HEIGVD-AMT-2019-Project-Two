@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 
-// TODO
 @Getter
 @Setter
 @Entity

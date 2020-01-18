@@ -51,8 +51,7 @@ public class TeamsApiController implements TeamsApi {
             return ResponseEntity.ok(toTeam(teamEntity.get()));
         }
 
-        // TODO : not working
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     ////////////////// UPDATE //////////////////

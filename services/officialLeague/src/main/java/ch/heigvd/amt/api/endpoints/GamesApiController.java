@@ -7,7 +7,6 @@ import ch.heigvd.amt.entities.GameEntity;
 import ch.heigvd.amt.repositories.GameRepository;
 import ch.heigvd.amt.repositories.OfficialRepository;
 import ch.heigvd.amt.repositories.TeamRepository;
-import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -68,8 +67,7 @@ public class GamesApiController implements GamesApi {
             return ResponseEntity.ok(toGame(officialEntity.get()));
         }
 
-        // TODO : not working
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     ////////////////// UPDATE //////////////////

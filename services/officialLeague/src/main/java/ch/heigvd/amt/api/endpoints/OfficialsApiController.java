@@ -4,7 +4,6 @@ import ch.heigvd.amt.api.OfficialsApi;
 import ch.heigvd.amt.api.model.Official;
 import ch.heigvd.amt.api.model.OfficialDTO;
 import ch.heigvd.amt.entities.OfficialEntity;
-import ch.heigvd.amt.entities.TeamEntity;
 import ch.heigvd.amt.repositories.OfficialRepository;
 import ch.heigvd.amt.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +58,7 @@ public class OfficialsApiController implements OfficialsApi {
             return ResponseEntity.ok(toOfficial(officialEntity.get()));
         }
 
-        // TODO : not working
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     ////////////////// UPDATE //////////////////
