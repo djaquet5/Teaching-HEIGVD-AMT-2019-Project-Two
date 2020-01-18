@@ -44,7 +44,7 @@ ENGINE = InnoDB CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `officialLeague`.`Game` (
   `id` 				INT NOT NULL AUTO_INCREMENT,
-  `timestamp` 		DATETIME NOT NULL,
+  `timestamp` 		VARCHAR(45) NOT NULL,
   `idTeamAway` 		INT NOT NULL,
   `idTeamHome` 		INT NOT NULL,
   `idReferee` 		INT NOT NULL,

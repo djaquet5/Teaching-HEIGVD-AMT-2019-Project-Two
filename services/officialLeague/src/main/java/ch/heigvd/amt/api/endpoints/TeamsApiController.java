@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
@@ -55,7 +56,23 @@ public class TeamsApiController implements TeamsApi {
     }
 
     ////////////////// UPDATE //////////////////
+    @Override
+    public ResponseEntity<Void> updateTeamById(Integer teamId, @Valid TeamDTO team) {
+        TeamEntity entity;
 
+        try {
+            entity = teamRepository.findById(teamId).get();
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        changeElements(entity, team);
+        teamRepository.save(entity);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
     ////////////////// DELETE //////////////////
     @Override
@@ -87,5 +104,24 @@ public class TeamsApiController implements TeamsApi {
         team.setCity(entity.getCity());
 
         return team;
+    }
+
+    private void changeElements(TeamEntity entity, TeamDTO dto) {
+        String name = dto.getName();
+        String address = dto.getAddress();
+        String zip = dto.getZip();
+        String city = dto.getCity();
+
+        if(name != null && !name.isEmpty())
+            entity.setName(name);
+
+        if(address != null && !address.isEmpty())
+            entity.setAddress(address);
+
+        if(zip != null && !zip.isEmpty())
+            entity.setZip(zip);
+
+        if(city != null && !city.isEmpty())
+            entity.setCity(city);
     }
 }
