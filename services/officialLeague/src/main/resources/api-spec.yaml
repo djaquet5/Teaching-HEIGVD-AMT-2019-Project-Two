@@ -73,10 +73,6 @@ paths:
       consumes:
         - application/json
       parameters:
-        - name: teamId
-          in: path
-          required: true
-          type: integer
         - name: team
           in: body
           required: true
@@ -239,6 +235,25 @@ paths:
           description: forbidden
         '404':
           description: official not found
+
+    put:
+      description: Update a official by id
+      operationId: updateOfficialById
+      consumes:
+        - application/json
+      parameters:
+        - name: official
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/OfficialDTO'
+      responses:
+        '204':
+          description: Official updated successfully
+        '403':
+          description: Forbidden
+        '404':
+          description: Team not found
 
     delete:
       description: Delete an official by id

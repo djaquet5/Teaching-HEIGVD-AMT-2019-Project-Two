@@ -4,6 +4,7 @@ import ch.heigvd.amt.api.OfficialsApi;
 import ch.heigvd.amt.api.model.Official;
 import ch.heigvd.amt.api.model.OfficialDTO;
 import ch.heigvd.amt.entities.OfficialEntity;
+import ch.heigvd.amt.entities.TeamEntity;
 import ch.heigvd.amt.repositories.OfficialRepository;
 import ch.heigvd.amt.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,27 @@ public class OfficialsApiController implements OfficialsApi {
     }
 
     ////////////////// UPDATE //////////////////
+    @Override
+    public ResponseEntity<Void> updateOfficialById(Integer officialId, @Valid OfficialDTO official) {
+        OfficialEntity entity;
 
+        try {
+            entity = officialRepository.findById(officialId).get();
+        } catch(NoSuchElementException e){
+            System.out.println(e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        entity = changeElement(entity, official);
+        if(entity == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+
+        officialRepository.save(entity);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
     ////////////////// DELETE //////////////////
     @Override
@@ -98,5 +119,27 @@ public class OfficialsApiController implements OfficialsApi {
         official.setTeam(TeamsApiController.toTeam(entity.getTeam()));
 
         return official;
+    }
+
+    private OfficialEntity changeElement(OfficialEntity entity, OfficialDTO dto) {
+        TeamEntity team;
+        Integer idTeam = dto.getIdTeam();
+        if(idTeam != null) {
+            try {
+                team = teamRepository.findById(idTeam).get();
+                entity.setTeam(team);
+            } catch(NoSuchElementException e) {
+                System.out.println(e.getMessage());
+
+                return null;
+            }
+        }
+
+        Integer level = dto.getLevel();
+        if(level != null && level >= 1 && level <= 3)
+            entity.setLevel(level);
+
+
+        return entity;
     }
 }
