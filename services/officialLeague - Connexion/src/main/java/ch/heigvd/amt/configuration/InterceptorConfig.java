@@ -1,5 +1,7 @@
 package ch.heigvd.amt.configuration;
 
+import ch.heigvd.amt.api.interceptors.TokenInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -8,13 +10,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
 
-//    @Bean
-//    SecurityInterceptor securityInterceptor() {
-//        return new SecurityInterceptor();
-//    }
+    @Bean
+    TokenInterceptor tokenInterceptor(){
+        return new TokenInterceptor();
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(securityInterceptor()).addPathPatterns("/users/**");
+        registry.addInterceptor(tokenInterceptor()).addPathPatterns("/users/**");
     }
 }

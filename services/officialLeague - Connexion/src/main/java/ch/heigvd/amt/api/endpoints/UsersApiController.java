@@ -26,7 +26,7 @@ public class UsersApiController implements UsersApi {
 
     ////////////////// CREATE //////////////////
     @Override
-    public ResponseEntity<Void> createUsers(@Valid UserDTO user) {
+    public ResponseEntity<Void> createUsers(String authorization, @Valid UserDTO user) {
         UserEntity userEntity = toUserEntity(user);
         userRepository.save(userEntity);
 
@@ -35,7 +35,7 @@ public class UsersApiController implements UsersApi {
 
     ////////////////// READ //////////////////
     @Override
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<User>> getUsers(String authorization) {
         List<User> users = new ArrayList<>();
         for(UserEntity userEntity : userRepository.findAll()) {
             users.add(toUser(userEntity));
@@ -45,7 +45,7 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<User> getUserById(Integer userid) {
+    public ResponseEntity<User> getUserById(Integer userid, String authorization) {
         Optional<UserEntity> userEntity = userRepository.findById(userid);
 
         if(userEntity.isPresent()) {
@@ -57,7 +57,7 @@ public class UsersApiController implements UsersApi {
 
     ////////////////// UPDATE //////////////////
     @Override
-    public ResponseEntity<Void> updateUserById(Integer userid, @Valid UserDTO user) {
+    public ResponseEntity<Void> updateUserById(Integer userid, String authorization, @Valid UserDTO user) {
         UserEntity entity;
 
         try {
@@ -76,7 +76,7 @@ public class UsersApiController implements UsersApi {
 
     ////////////////// DELETE //////////////////
     @Override
-    public ResponseEntity<Void> deleteUserById(Integer userid) {
+    public ResponseEntity<Void> deleteUserById(Integer userid, String authorization) {
         if (!userRepository.existsById(userid))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 

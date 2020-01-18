@@ -1,7 +1,9 @@
 package ch.heigvd.amt.api.service;
 
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.stereotype.Service;
 
+@Service
 public class Authentication implements IAuthentication {
     @Override
     public String hashPassword(String password) {
