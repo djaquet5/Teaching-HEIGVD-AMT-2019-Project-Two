@@ -15,65 +15,34 @@ parameters:
     required: true
 
 paths:
-  /connection:
-    post:
-      description: user connection
-      operationId: login
-      produces:
-        - application/json
-      consumes:
-        - application/json
-      parameters:
-        - name: credentials
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Credentials'
-      responses:
-        '200':
-          description: successfuly loged in
-          schema:
-            type: object
-            $ref: '#/definitions/Token'
-        '401':
-          description: unvalid credentials
-        '500':
-          description: token generation failure
+#  /connection:
+#    post:
+#      description: user connection
+#      operationId: login
+#      produces:
+#        - application/json
+#      consumes:
+#        - application/json
+#      parameters:
+#        - name: credentials
+#          in: body
+#          required: true
+#          schema:
+#            $ref: '#/definitions/Credentials'
+#      responses:
+#        '200':
+#          description: successfuly loged in
+#          schema:
+#            type: object
+#            $ref: '#/definitions/Token'
+#        '401':
+#          description: unvalid credentials
+#        '500':
+#          description: token generation failure
 
-  /fruits:
-    post:
-      description: create a fruit
-      operationId: createFruit
-      consumes:
-        - application/json
-      parameters:
-        - name: fruit
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Fruit'
-      responses:
-        '201':
-          description: created
-          schema:
-            type: object
-    get:
-      description: get the list of all fruits
-      operationId: getFruits
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: success
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Fruit'
   /users:
-    parameters:
-      - $ref: '#/parameters/token'
     get:
-      description: get the list of all users
+      description: Get the list of all users
       operationId: getUsers
       produces:
         - application/json
@@ -87,7 +56,7 @@ paths:
         '403':
           description: forbidden
     post:
-      description: create a user
+      description: Create a user
       operationId: createUsers
       consumes:
         - application/json
@@ -96,83 +65,89 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/UserDTO'
       responses:
         '201':
           description: created
-          schema:
-            type: object
         '403':
           description: forbidded
 
   /users/{userid}:
     parameters:
-      - name: userId
+      - name: userid
         in: path
         required: true
         type: integer
-      - $ref: '#/parameters/token'
 
     get:
-      description: get a user by id
+      description: Get a user by id
       operationId: getUserById
       produces:
         - application/json
       responses:
         '200':
-          description: product retrieved successfully
+          description: User retrieved successfully
           schema:
             $ref: '#/definitions/User'
         '403':
           description: forbidden
         '404':
-          description: team not found
+          description: user not found
+
+    put:
+      description: Update a user by id
+      operationId: updateUserById
+      consumes:
+        - application/json
+      parameters:
+        - name: user
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserDTO'
+      responses:
+        '204':
+          description: User updated successfully
+        '403':
+          description: Forbidden
+        '404':
+          description: User not found
 
     delete:
-      description: delete a user by id
+      description: Delete a user by id
       operationId: deleteUserById
       responses:
         '204':
-          description: team deleted successfully
+          description: user deleted successfully
         '403':
           description: forbidden
         '404':
-          description: team not found
+          description: user not found
 definitions:
-  Fruit:
-    type: object
-    properties:
-      kind:
-        type: string
-      colour:
-        type: string
-      size:
-        type: string
-      weight:
-        type: string
-
   User:
     type: object
-    required:
-      - id
-      - firstname
-      - lastname
-      - email
-      - password
     properties:
       id:
         type: integer
-        format: int64
       firstname:
         type: string
-        example: John
       lastname:
         type: string
-        example: Doe
       email:
         type: string
         format: email
-        example: john@doe.com
       password:
         type: string
-        format: password
+
+  UserDTO:
+    type: object
+    properties:
+      firstname:
+        type: string
+      lastname:
+        type: string
+      email:
+        type: string
+        format: email
+      password:
+        type: string

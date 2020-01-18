@@ -6,25 +6,18 @@ import org.joda.time.DateTime;
 
 import javax.persistence.*;
 
-// TODO
 @Getter
+@Setter
 @Entity
 @Table(name = "User")
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
-    @Setter
-    private string firstName;
-
-    @Setter
-    private string lastName;
-
-    @Setter
-    private string email;
-
-    @Setter
-    private string password;
+    private String firstname;
+    private String lastname;
+    private String email;
+    private String password;
 }
