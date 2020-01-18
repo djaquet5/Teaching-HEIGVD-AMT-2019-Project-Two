@@ -119,6 +119,8 @@ public class UsersApiController implements UsersApi {
         user.setFirstname(entity.getFirstname());
         user.setLastname(entity.getLastname());
         user.setPassword(entity.getPassword());
+        user.setRole(entity.getRole());
+
         return user;
     }
 
@@ -127,6 +129,7 @@ public class UsersApiController implements UsersApi {
         String lastname = dto.getLastname();
         String email = dto.getEmail();
         String password = dto.getPassword();
+        String role = dto.getRole();
 
         if(firstname != null && !firstname.isEmpty())
             entity.setFirstname(firstname);
@@ -139,6 +142,9 @@ public class UsersApiController implements UsersApi {
 
         if(password != null && !password.isEmpty())
             entity.setPassword(password);
+
+        if(role != null && !role.isEmpty())
+            entity.setRole(role);
     }
 
     private UserEntity toUserEntity(UserDTO dto) {
@@ -147,6 +153,7 @@ public class UsersApiController implements UsersApi {
         entity.setLastname(dto.getLastname());
         entity.setEmail(dto.getEmail());
         entity.setPassword(dto.getPassword());
+        entity.setRole(dto.getRole());
 
         return entity;
     }

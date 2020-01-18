@@ -138,6 +138,8 @@ definitions:
         format: email
       password:
         type: string
+      role:
+        type: string
 
   UserDTO:
     type: object
@@ -150,4 +152,6 @@ definitions:
         type: string
         format: email
       password:
+        type: string
+      role:
         type: string

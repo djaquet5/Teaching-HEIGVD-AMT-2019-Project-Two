@@ -2,15 +2,14 @@ package ch.heigvd.amt.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.joda.time.DateTime;
-
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "User")
-public class UserEntity {
+public class UserEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +19,5 @@ public class UserEntity {
     private String lastname;
     private String email;
     private String password;
+    private String role;
 }

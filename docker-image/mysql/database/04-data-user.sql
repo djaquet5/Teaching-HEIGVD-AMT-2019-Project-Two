@@ -1,9 +1,11 @@
 USE `User`;
 
+INSERT INTO `User` (`firstname`,`lastname`,`email`,`password`, `role`) 
+    VALUES 	("Nathan","Fluckiger","nathan@fluckiger.ch","1234", "admin"),
+            ("David","Jaquet","david@jaquet.ch","1234", "admin");
+
 INSERT INTO `User` (`firstname`,`lastname`,`email`,`password`) 
-	VALUES 	("Nathan","Fluckiger","nathan@fluckiger.ch","1234"),
-            ("David","Jaquet","david@jaquet.ch","1234"),    
-            ("Fuller","Maddox","non.enim@eratnonummyultricies.co.uk","IBK"),
+	VALUES 	("Fuller","Maddox","non.enim@eratnonummyultricies.co.uk","IBK"),
 			("Damian","Monroe","Nulla@consequatdolor.edu","FYL"),
 			("Avram","Salinas","aliquam@pedemalesuada.edu","TSY"),
 			("Randall","Harding","Phasellus.nulla.Integer@laoreetlectus.net","KCY"),

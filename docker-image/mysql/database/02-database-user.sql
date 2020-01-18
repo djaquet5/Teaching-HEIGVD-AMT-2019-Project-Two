@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `User`.`User` (
   `lastname`	VARCHAR(45) NOT NULL,
   `email`		VARCHAR(45) NOT NULL UNIQUE,
   `password`	VARCHAR(255) NOT NULL,
+  `role`        VARCHAR(45) DEFAULT "user",
   PRIMARY KEY (`id`)
 )
 ENGINE = InnoDB CHARACTER SET = utf8;
