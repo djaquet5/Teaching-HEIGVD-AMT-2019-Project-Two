@@ -23,7 +23,8 @@ public class SwaggerDocumentationConfig {
             .licenseUrl("http://unlicense.org")
             .termsOfServiceUrl("")
             .version("0.1.0")
-            .contact(new Contact("","", ""))
+            .contact(new Contact("Nathan Fluckiger","", "nathan.fluckiger@heig-vd.ch"))
+            .contact(new Contact("David Jaquet", "", "david.jaquet@heig-vd.ch"))
             .build();
     }
 

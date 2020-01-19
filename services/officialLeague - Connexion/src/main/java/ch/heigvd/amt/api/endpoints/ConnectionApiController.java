@@ -9,10 +9,14 @@ import ch.heigvd.amt.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 
 import javax.validation.Valid;
 import java.util.NoSuchElementException;
 
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-26T19:36:34.802Z")
+
+@Controller
 public class ConnectionApiController implements ConnectionApi {
 
     @Autowired
