@@ -5,6 +5,7 @@ import ch.heigvd.amt.api.model.User;
 import ch.heigvd.amt.api.model.UserDTO;
 import ch.heigvd.amt.api.service.Authentication;
 import ch.heigvd.amt.api.service.DecodedToken;
+import ch.heigvd.amt.api.util.Role;
 import ch.heigvd.amt.entities.UserEntity;
 import ch.heigvd.amt.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,8 @@ public class UsersApiController implements UsersApi {
         if(userRepository.existsByEmail(user.getEmail()))
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
-        if(user.getRole() == null || (!user.getRole().equals("user") && !user.getRole().equals("admin")))
-            user.setRole("user");
+        if(user.getRole() == null || (!user.getRole().equals(Role.USER) && !user.getRole().equals(Role.ADMIN)))
+            user.setRole(Role.USER);
 
         user.setPassword(authentication.hashPassword(user.getPassword()));
         UserEntity userEntity = toUserEntity(user);
@@ -149,8 +150,8 @@ public class UsersApiController implements UsersApi {
         if(password != null && !password.isEmpty())
             entity.setPassword(authentication.hashPassword(password));
 
-        if(role == null || (!role.equals("user") && !role.equals("admin")))
-            entity.setRole("user");
+        if(role == null || (!role.equals(Role.USER) && !role.equals(Role.ADMIN)))
+            entity.setRole(Role.USER);
         else
             entity.setRole(role);
     }

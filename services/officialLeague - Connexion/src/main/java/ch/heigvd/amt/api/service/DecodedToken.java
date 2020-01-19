@@ -1,5 +1,6 @@
 package ch.heigvd.amt.api.service;
 
+import ch.heigvd.amt.api.util.Role;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,6 +11,6 @@ public class DecodedToken {
     String role;
 
     public boolean isAdmin() {
-        return role != null && role.equals("admin");
+        return role != null && role.equals(Role.ADMIN);
     }
 }
