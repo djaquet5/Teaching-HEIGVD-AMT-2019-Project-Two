@@ -20,8 +20,8 @@ public class JWTToken implements IJWTToken {
         Algorithm algo = Algorithm.HMAC256(secret);
 
         String token = JWT.create().withClaim("email", userEntity.getEmail())
-                                    .withClaim("role", userEntity.getRole())
-                                    .sign(algo);
+                                   .withClaim("role", userEntity.getRole())
+                                   .sign(algo);
 
         return "Bearer " + token;
     }

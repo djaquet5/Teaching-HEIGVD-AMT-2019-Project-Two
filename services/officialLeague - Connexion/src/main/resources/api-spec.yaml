@@ -67,9 +67,11 @@ paths:
             $ref: '#/definitions/UserDTO'
       responses:
         '201':
-          description: created
+          description: Created
         '403':
-          description: forbidden
+          description: Forbidden
+        '409':
+          description: Duplicate email
 
   /users/{userid}:
     parameters:

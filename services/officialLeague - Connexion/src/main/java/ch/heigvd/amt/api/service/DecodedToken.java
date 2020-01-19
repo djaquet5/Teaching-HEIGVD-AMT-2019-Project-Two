@@ -8,4 +8,8 @@ import lombok.Getter;
 public class DecodedToken {
     String email;
     String role;
+
+    public boolean isAdmin() {
+        return role != null && role.equals("admin");
+    }
 }

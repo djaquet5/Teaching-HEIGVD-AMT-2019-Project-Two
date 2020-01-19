@@ -3,6 +3,8 @@ package ch.heigvd.amt.api.endpoints;
 import ch.heigvd.amt.api.UsersApi;
 import ch.heigvd.amt.api.model.User;
 import ch.heigvd.amt.api.model.UserDTO;
+import ch.heigvd.amt.api.service.Authentication;
+import ch.heigvd.amt.api.service.DecodedToken;
 import ch.heigvd.amt.entities.UserEntity;
 import ch.heigvd.amt.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +25,31 @@ import java.util.Optional;
 public class UsersApiController implements UsersApi {
 
     @Autowired
+    Authentication authentication;
+
+    @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    HttpServletRequest httpServletRequest;
 
     ////////////////// CREATE //////////////////
     @Override
     public ResponseEntity<Void> createUsers(String authorization, @Valid UserDTO user) {
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
+
+        if(!decodedToken.isAdmin())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        if(userRepository.existsByEmail(user.getEmail()))
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+
+        if(user.getRole() == null || (!user.getRole().equals("user") && !user.getRole().equals("admin")))
+            user.setRole("user");
+
+        user.setPassword(authentication.hashPassword(user.getPassword()));
         UserEntity userEntity = toUserEntity(user);
+
         userRepository.save(userEntity);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -62,21 +84,32 @@ public class UsersApiController implements UsersApi {
 
         try {
             entity = userRepository.findById(userid).get();
+
         } catch (NoSuchElementException e) {
             System.out.println(e.getMessage());
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        changeElements(entity, user);
-        userRepository.save(entity);
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        if(decodedToken.isAdmin() || entity.getEmail().equals(decodedToken.getEmail())) {
+            changeElements(entity, user);
+            userRepository.save(entity);
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     ////////////////// DELETE //////////////////
     @Override
     public ResponseEntity<Void> deleteUserById(Integer userid, String authorization) {
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
+        if(!decodedToken.isAdmin())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         if (!userRepository.existsById(userid))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
@@ -84,33 +117,6 @@ public class UsersApiController implements UsersApi {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-//    @Autowired
-//    UserRepository userRepository;
-//
-//    @Autowired
-//    IAuthentication authentication;
-//
-//    @Autowired
-//    IAuthorization authorization;
-//
-//    @Override
-//    public ResponseEntity<Token> login(@ApiParam(value = "" ,required=true )  @Valid @RequestBody Credentials credentials) {
-//        if(userRepository.existsById(credentials.getEmail())) {
-//
-//            User user = toUser(userRepository.findById(credentials.getEmail()).get());
-//            if(authentication.checkPassword(credentials.getPassword(), userRepository.findById(credentials.getEmail()).get().getPassword())) {
-//                try {
-//                    Token token = authorization.generateToken(user);
-//                    return ResponseEntity.ok(token);
-//                } catch (JWTCreationException e) {
-//                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//                }
-//            }
-//        }
-//
-//        return ResponseEntity.status(401).build();
-//    }
 
     private User toUser(UserEntity entity) {
         User user = new User();
@@ -141,9 +147,11 @@ public class UsersApiController implements UsersApi {
             entity.setEmail(email);
 
         if(password != null && !password.isEmpty())
-            entity.setPassword(password);
+            entity.setPassword(authentication.hashPassword(password));
 
-        if(role != null && !role.isEmpty())
+        if(role == null || (!role.equals("user") && !role.equals("admin")))
+            entity.setRole("user");
+        else
             entity.setRole(role);
     }
 
