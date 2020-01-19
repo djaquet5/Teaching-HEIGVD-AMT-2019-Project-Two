@@ -1,0 +1,64 @@
+version: '3'
+services:
+   reverse-proxy:
+      image: traefik:v2.1.2
+      command: --api.insecure=true --providers.docker=true --providers.docker.exposedbydefault=false --entrypoints.web.address=:80
+      ports:
+         - "80:80"
+         - "2020:8080"
+      volumes:
+         - /var/run/docker.sock:/var/run/docker.sock
+      
+   mysql_auth:
+      build: ../../docker-image/mysql/auth
+      restart: always
+      command: --default-authentication-plugin=mysql_native_password
+      environment:
+         MYSQL_ROOT_PASSWORD: admin
+      ports:
+         - "3306:3306"
+      volumes:
+         - data:/data/db
+   mysql_official:
+      build: ../../docker-image/mysql/officialLeague
+      restart: always
+      command: --default-authentication-plugin=mysql_native_password
+      environment:
+         MYSQL_ROOT_PASSWORD: admin
+      ports:
+         - "3307:3306"
+      volumes:
+         - data:/data/db
+        
+   phpmyadmin:
+      build: ../../docker-image/phpmyadmin
+      environment:
+         PMA_HOSTS: mysql_auth, mysql_official
+         MYSQL_ROOT_PASSWORD: admin
+      ports:
+         - "6060:80"
+   
+   auth:
+      build: ../../microservices/auth
+      labels:
+         - "traefik.enable=true"
+         - "traefik.http.routers.auth.entrypoint=web"
+         - "traefik.http.routers.auth.rule=PathPrefix(`/api/auth`)"
+         - "traefik.http.services.auth.loadbalancer.server.port=8080"
+      entrypoint: ["/opt/wait_for_it.sh","mysql_auth:3306","-t" ,"0","--","java","-jar","/opt/auth.jar"]
+      depends_on:
+         - mysql_auth
+         
+   official-league:
+      build: ../../microservices/officialLeague
+      labels:
+         - "traefik.enable=true"
+         - "traefik.http.routers.official-league.entrypoint=web"
+         - "traefik.http.routers.official-league.rule=PathPrefix(`/api/officialLeague`)"
+         - "traefik.http.services.official-league.loadbalancer.server.port=8081"
+      entrypoint: ["/opt/wait_for_it.sh","mysql_official:3306","-t" ,"0","--","java","-jar","/opt/officialLeague.jar"]
+      depends_on:
+         - mysql_official
+         
+volumes:
+    data:
