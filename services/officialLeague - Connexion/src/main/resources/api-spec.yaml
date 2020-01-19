@@ -31,14 +31,11 @@ paths:
         '200':
           description: successfuly logged in
           schema:
-            type: object
-            $ref: '#/definitions/Token'
+            type: string
         '401':
           description: unvalid credentials
         '404':
           description: not found
-        '500':
-          description: token generation failure
 
   /users:
     parameters:
@@ -165,10 +162,4 @@ definitions:
       email:
         type: string
       password:
-        type: string
-
-  Token:
-    type: object
-    properties:
-      token:
         type: string
