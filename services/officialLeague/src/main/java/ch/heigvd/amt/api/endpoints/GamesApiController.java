@@ -3,6 +3,7 @@ package ch.heigvd.amt.api.endpoints;
 import ch.heigvd.amt.api.GamesApi;
 import ch.heigvd.amt.api.model.Game;
 import ch.heigvd.amt.api.model.GameDTO;
+import ch.heigvd.amt.api.service.DecodedToken;
 import ch.heigvd.amt.entities.GameEntity;
 import ch.heigvd.amt.repositories.GameRepository;
 import ch.heigvd.amt.repositories.OfficialRepository;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +34,17 @@ public class GamesApiController implements GamesApi {
     @Autowired
     OfficialRepository officialRepository;
 
+    @Autowired
+    HttpServletRequest httpServletRequest;
+
     ////////////////// CREATE //////////////////
     @Override
     public ResponseEntity<Void> createGame(String authorization, @Valid GameDTO game) {
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
+
+        if(!decodedToken.isAdmin())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         GameEntity entity = toGameEntity(game);
         if (entity == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -73,6 +83,11 @@ public class GamesApiController implements GamesApi {
     ////////////////// UPDATE //////////////////
     @Override
     public ResponseEntity<Void> updateGameById(Integer gameId, String authorization, @Valid GameDTO game) {
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
+
+        if(!decodedToken.isAdmin())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         GameEntity entity;
 
         try {
@@ -95,6 +110,11 @@ public class GamesApiController implements GamesApi {
     ////////////////// DELETE //////////////////
     @Override
     public ResponseEntity<Void> deleteGameById(Integer gameId, String authorization) {
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
+
+        if(!decodedToken.isAdmin())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         if(!gameRepository.existsById(gameId))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 

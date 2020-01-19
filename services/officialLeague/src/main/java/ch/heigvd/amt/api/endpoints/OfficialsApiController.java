@@ -3,6 +3,7 @@ package ch.heigvd.amt.api.endpoints;
 import ch.heigvd.amt.api.OfficialsApi;
 import ch.heigvd.amt.api.model.Official;
 import ch.heigvd.amt.api.model.OfficialDTO;
+import ch.heigvd.amt.api.service.DecodedToken;
 import ch.heigvd.amt.entities.OfficialEntity;
 import ch.heigvd.amt.repositories.OfficialRepository;
 import ch.heigvd.amt.repositories.TeamRepository;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +29,17 @@ public class OfficialsApiController implements OfficialsApi {
     @Autowired
     TeamRepository teamRepository;
 
+    @Autowired
+    HttpServletRequest httpServletRequest;
+
     ////////////////// CREATE //////////////////
     @Override
     public ResponseEntity<Void> createOfficial(String authorization, @Valid OfficialDTO official) {
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
+
+        if(!decodedToken.isAdmin())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         OfficialEntity entity = toOfficialEntity(official);
         if (entity == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -73,6 +84,11 @@ public class OfficialsApiController implements OfficialsApi {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
+
+        if(!decodedToken.isAdmin())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         entity = changeElements(entity, official);
         if(entity == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -86,6 +102,11 @@ public class OfficialsApiController implements OfficialsApi {
     ////////////////// DELETE //////////////////
     @Override
     public ResponseEntity<Void> deleteOfficialById(Integer officialId, String authorization) {
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
+
+        if(!decodedToken.isAdmin())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         if (!officialRepository.existsById(officialId))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 

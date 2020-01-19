@@ -3,6 +3,7 @@ package ch.heigvd.amt.api.endpoints;
 import ch.heigvd.amt.api.TeamsApi;
 import ch.heigvd.amt.api.model.Team;
 import ch.heigvd.amt.api.model.TeamDTO;
+import ch.heigvd.amt.api.service.DecodedToken;
 import ch.heigvd.amt.entities.TeamEntity;
 import ch.heigvd.amt.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +24,17 @@ public class TeamsApiController implements TeamsApi {
     @Autowired
     TeamRepository teamRepository;
 
+    @Autowired
+    HttpServletRequest httpServletRequest;
+
     ////////////////// CREATE //////////////////
     @Override
     public ResponseEntity<Void> createTeam(String authorization, @Valid TeamDTO team) {
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
+
+        if(!decodedToken.isAdmin())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         TeamEntity entity = toTeamEntity(team);
         teamRepository.save(entity);
 
@@ -56,6 +66,11 @@ public class TeamsApiController implements TeamsApi {
     ////////////////// UPDATE //////////////////
     @Override
     public ResponseEntity<Void> updateTeamById(Integer teamId, String authorization, @Valid TeamDTO team) {
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
+
+        if(!decodedToken.isAdmin())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         TeamEntity entity;
 
         try {
@@ -75,6 +90,11 @@ public class TeamsApiController implements TeamsApi {
     ////////////////// DELETE //////////////////
     @Override
     public ResponseEntity<Void> deleteTeamById(Integer teamId, String authorization) {
+        DecodedToken decodedToken = (DecodedToken) httpServletRequest.getAttribute("token");
+
+        if(!decodedToken.isAdmin())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         if (!teamRepository.existsById(teamId))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
