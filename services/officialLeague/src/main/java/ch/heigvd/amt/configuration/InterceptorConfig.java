@@ -18,5 +18,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor()).addPathPatterns("/games/**");
+        registry.addInterceptor(tokenInterceptor()).addPathPatterns("/officials/**");
+        registry.addInterceptor(tokenInterceptor()).addPathPatterns("/teams/**");
     }
 }
