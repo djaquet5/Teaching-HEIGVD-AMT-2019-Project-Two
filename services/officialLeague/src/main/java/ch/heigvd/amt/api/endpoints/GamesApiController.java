@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -35,7 +34,7 @@ public class GamesApiController implements GamesApi {
 
     ////////////////// CREATE //////////////////
     @Override
-    public ResponseEntity<Void> createGame(@Valid GameDTO game) {
+    public ResponseEntity<Void> createGame(String authorization, @Valid GameDTO game) {
         GameEntity entity = toGameEntity(game);
         if (entity == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -45,11 +44,12 @@ public class GamesApiController implements GamesApi {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    //    public ResponseEntity<List<Game>> getGames(String authorization) {
-
     ////////////////// READ //////////////////
     @Override
-    public ResponseEntity<List<Game>> getGames(@Min(0) @Valid Integer page, @Min(0) @Valid Integer limit) {
+    public ResponseEntity<List<Game>> getGames(String authorization, @Valid Integer page, @Valid Integer limit) {
+        if(page < 0 || limit < 0)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
         List<Game> games = new ArrayList<>();
         Pageable pageable = PageRequest.of(page, limit);
         for (GameEntity gameEntity : gameRepository.findAll(pageable)) {
@@ -60,7 +60,7 @@ public class GamesApiController implements GamesApi {
     }
 
     @Override
-    public ResponseEntity<Game> getGameById(Integer gameId) {
+    public ResponseEntity<Game> getGameById(Integer gameId, String authorization) {
         Optional<GameEntity> officialEntity = gameRepository.findById(gameId);
 
         if(officialEntity.isPresent()) {
@@ -72,7 +72,7 @@ public class GamesApiController implements GamesApi {
 
     ////////////////// UPDATE //////////////////
     @Override
-    public ResponseEntity<Void> updateGameById(Integer gameId, @Valid GameDTO game) {
+    public ResponseEntity<Void> updateGameById(Integer gameId, String authorization, @Valid GameDTO game) {
         GameEntity entity;
 
         try {
@@ -94,7 +94,7 @@ public class GamesApiController implements GamesApi {
 
     ////////////////// DELETE //////////////////
     @Override
-    public ResponseEntity<Void> deleteGameById(Integer gameId) {
+    public ResponseEntity<Void> deleteGameById(Integer gameId, String authorization) {
         if(!gameRepository.existsById(gameId))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 

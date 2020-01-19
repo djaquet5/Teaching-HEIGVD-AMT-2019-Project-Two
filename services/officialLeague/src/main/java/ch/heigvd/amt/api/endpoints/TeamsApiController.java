@@ -24,7 +24,7 @@ public class TeamsApiController implements TeamsApi {
 
     ////////////////// CREATE //////////////////
     @Override
-    public ResponseEntity<Void> createTeam(@Valid TeamDTO team) {
+    public ResponseEntity<Void> createTeam(String authorization, @Valid TeamDTO team) {
         TeamEntity entity = toTeamEntity(team);
         teamRepository.save(entity);
 
@@ -32,9 +32,8 @@ public class TeamsApiController implements TeamsApi {
     }
 
     ////////////////// READ //////////////////
-    //    public ResponseEntity<List<Team>> getTeams(String authorization) {
     @Override
-    public ResponseEntity<List<Team>> getTeams() {
+    public ResponseEntity<List<Team>> getTeams(String authorization) {
         List<Team> teams = new ArrayList<>();
         for (TeamEntity teamEntity : teamRepository.findAll()) {
             teams.add(toTeam(teamEntity));
@@ -44,7 +43,7 @@ public class TeamsApiController implements TeamsApi {
     }
 
     @Override
-    public ResponseEntity<Team> getTeamById(Integer teamId) {
+    public ResponseEntity<Team> getTeamById(Integer teamId, String authorization) {
         Optional<TeamEntity> teamEntity = teamRepository.findById(teamId);
 
         if(teamEntity.isPresent()) {
@@ -56,7 +55,7 @@ public class TeamsApiController implements TeamsApi {
 
     ////////////////// UPDATE //////////////////
     @Override
-    public ResponseEntity<Void> updateTeamById(Integer teamId, @Valid TeamDTO team) {
+    public ResponseEntity<Void> updateTeamById(Integer teamId, String authorization, @Valid TeamDTO team) {
         TeamEntity entity;
 
         try {
@@ -75,7 +74,7 @@ public class TeamsApiController implements TeamsApi {
 
     ////////////////// DELETE //////////////////
     @Override
-    public ResponseEntity<Void> deleteTeamById(Integer teamId) {
+    public ResponseEntity<Void> deleteTeamById(Integer teamId, String authorization) {
         if (!teamRepository.existsById(teamId))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 

@@ -23,11 +23,11 @@ public class SwaggerDocumentationConfig {
             .licenseUrl("http://unlicense.org")
             .termsOfServiceUrl("")
             .version("0.1.0")
-            .contact(new Contact("","", ""))
+            .contact(new Contact("Nathan Fluckiger","", "nathan.fluckiger@heig-vd.ch"))
+            .contact(new Contact("David Jaquet", "", "david.jaquet@heig-vd.ch"))
             .build();
     }
 
-    // TODO : Uncomment for token
     @Bean
     public Docket customImplementation(){
         return new Docket(DocumentationType.SWAGGER_2)
@@ -36,7 +36,6 @@ public class SwaggerDocumentationConfig {
                     .build()
                 .directModelSubstitute(org.joda.time.LocalDate.class, java.sql.Date.class)
                 .directModelSubstitute(org.joda.time.DateTime.class, java.util.Date.class)
-                /*.securitySchemes(Arrays.asList(new ApiKey("Bearer", "Authorization", "header")))*/
                 .apiInfo(apiInfo());
     }
 

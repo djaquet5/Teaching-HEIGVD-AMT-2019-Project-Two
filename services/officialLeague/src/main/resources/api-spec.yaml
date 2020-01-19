@@ -7,14 +7,18 @@ host: localhost:8080
 basePath: /api
 schemes:
   - http
-securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
+parameters:
+  token:
     in: header
+    name: Authorization
+    type: string
+    required: true
 
 paths:
   /teams:
+    parameters:
+      - $ref: '#/parameters/token'
+
     get:
       description: Get the list of all teams
       operationId: getTeams
@@ -29,6 +33,7 @@ paths:
               $ref: '#/definitions/Team'
         '403':
           description: forbidden
+
     post:
       description: Create a team
       operationId: createTeam
@@ -52,6 +57,8 @@ paths:
         in: path
         required: true
         type: integer
+      - $ref: '#/parameters/token'
+
     get:
       description: Get a team by id
       operationId: getTeamById
@@ -98,6 +105,9 @@ paths:
           description: team not found
 
   /games:
+    parameters:
+      - $ref: '#/parameters/token'
+
     get:
       description: Get the list of all games
       operationId: getGames
@@ -109,14 +119,12 @@ paths:
           required: false
           type: integer
           default: 0
-          minimum: 0
           description: The index of the page to display (starting at 0)
         - name: limit
           in: query
           required: false
           type: integer
           default: 10
-          minimum: 0
           description: The number of element to display
       responses:
         '200':
@@ -125,8 +133,11 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Game'
+        '400':
+          description: Parameters not valid
         '403':
           description: forbidden
+
     post:
       description: Create a game
       operationId: createGame
@@ -152,6 +163,7 @@ paths:
         in: path
         required: true
         type: integer
+      - $ref: '#/parameters/token'
 
     get:
       description: Get a game by id
@@ -199,6 +211,9 @@ paths:
           description: game not found
 
   /officials:
+    parameters:
+      - $ref: '#/parameters/token'
+
     get:
       description: Get a list of all officials
       operationId: getOfficials
@@ -239,6 +254,7 @@ paths:
         in: path
         required: true
         type: integer
+      - $ref: '#/parameters/token'
 
     get:
       description: Get an official by id

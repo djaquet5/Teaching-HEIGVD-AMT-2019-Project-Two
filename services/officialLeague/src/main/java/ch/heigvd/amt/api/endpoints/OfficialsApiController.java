@@ -28,7 +28,7 @@ public class OfficialsApiController implements OfficialsApi {
 
     ////////////////// CREATE //////////////////
     @Override
-    public ResponseEntity<Void> createOfficial(@Valid OfficialDTO official) {
+    public ResponseEntity<Void> createOfficial(String authorization, @Valid OfficialDTO official) {
         OfficialEntity entity = toOfficialEntity(official);
         if (entity == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -40,8 +40,7 @@ public class OfficialsApiController implements OfficialsApi {
 
     ////////////////// READ //////////////////
     @Override
-//    public ResponseEntity<List<Official>> getOfficials(String authorization) {
-    public ResponseEntity<List<Official>> getOfficials() {
+    public ResponseEntity<List<Official>> getOfficials(String authorization) {
         List<Official> officials = new ArrayList<>();
         for (OfficialEntity officialEntity : officialRepository.findAll()) {
             officials.add(toOfficial(officialEntity));
@@ -51,7 +50,7 @@ public class OfficialsApiController implements OfficialsApi {
     }
 
     @Override
-    public ResponseEntity<Official> getOfficialById(Integer officialId) {
+    public ResponseEntity<Official> getOfficialById(Integer officialId, String authorization) {
         Optional<OfficialEntity> officialEntity = officialRepository.findById(officialId);
 
         if(officialEntity.isPresent()) {
@@ -63,7 +62,7 @@ public class OfficialsApiController implements OfficialsApi {
 
     ////////////////// UPDATE //////////////////
     @Override
-    public ResponseEntity<Void> updateOfficialById(Integer officialId, @Valid OfficialDTO official) {
+    public ResponseEntity<Void> updateOfficialById(Integer officialId, String authorization, @Valid OfficialDTO official) {
         OfficialEntity entity;
 
         try {
@@ -86,7 +85,7 @@ public class OfficialsApiController implements OfficialsApi {
 
     ////////////////// DELETE //////////////////
     @Override
-    public ResponseEntity<Void> deleteOfficialById(Integer officialId) {
+    public ResponseEntity<Void> deleteOfficialById(Integer officialId, String authorization) {
         if (!officialRepository.existsById(officialId))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
